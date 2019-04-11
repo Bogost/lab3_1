@@ -131,4 +131,14 @@ public class BookKeeperTest {
         verify(noTaxPolicy, times(0)).calculateTax(any(ProductType.class), any(Money.class));
     }
 
+    @Test
+    public void BookKeeperAskedForInvoiceShouldGetItemsOnce() {
+
+        InvoiceRequest invoiceRequest = new InvoiceRequest(clientData);
+        InvoiceRequest spyInvoiceRequest = Mockito.spy(invoiceRequest);
+
+        Invoice invoice = bookKeeper.issuance(spyInvoiceRequest, noTaxPolicy);
+
+        verify(spyInvoiceRequest, times(1)).getItems();
+    }
 }
