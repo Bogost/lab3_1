@@ -121,4 +121,14 @@ public class BookKeeperTest {
         verify(noTaxPolicy, times(2)).calculateTax(any(ProductType.class), any(Money.class));
     }
 
+    @Test
+    public void BookKeeperAskedForInvoiceWithoutPositionsShouldNotCalculateTax() {
+
+        InvoiceRequest invoiceRequest = new InvoiceRequest(clientData);
+
+        Invoice invoice = bookKeeper.issuance(invoiceRequest, noTaxPolicy);
+
+        verify(noTaxPolicy, times(0)).calculateTax(any(ProductType.class), any(Money.class));
+    }
+
 }
