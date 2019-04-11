@@ -2,6 +2,8 @@ package pl.com.bottega.ecommerce.sales.domain.invoicing;
 
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -27,8 +29,7 @@ public class BookKeeperTest {
     private TaxPolicy noTaxPolicy;
 
     private ProductData apple;
-
-    private RequestItem tenApples;
+    private ProductData peniciline;
 
     @Before
     public void setup() {
@@ -59,13 +60,24 @@ public class BookKeeperTest {
                .thenReturn(ProductType.FOOD);
         Mockito.when(apple.getSnapshotDate())
                .thenReturn(date);
-        // request items--------------------------------------------------------------------------
-        tenApples = new RequestItem(apple, 10, new Money(5));
+
+        peniciline = Mockito.mock(ProductData.class);
+        Mockito.when(peniciline.getProductId())
+               .thenReturn(new Id("1"));
+        Mockito.when(peniciline.getPrice())
+               .thenReturn(new Money(3));
+        Mockito.when(peniciline.getName())
+               .thenReturn("peniciline");
+        Mockito.when(peniciline.getType())
+               .thenReturn(ProductType.DRUG);
+        Mockito.when(peniciline.getSnapshotDate())
+               .thenReturn(date);
 
     }
 
     @Test
     public void BookKeeperAskedForInvoiceWithOnePositionShouldReturnSuchInvoice() {
+        RequestItem tenApples = new RequestItem(apple, 10, new Money(5));
         InvoiceRequest invoiceRequest = new InvoiceRequest(clientData);
         invoiceRequest.add(tenApples);
         Invoice invoice = bookKeeper.issuance(invoiceRequest, noTaxPolicy);
@@ -74,4 +86,19 @@ public class BookKeeperTest {
                           .size(),
                 Matchers.comparesEqualTo(1));
     }
+
+    @Test
+    public void BookKeeperAskedForInvoiceWithTwoPositionShouldCalculateTaxTwoTimes() {
+        RequestItem fiveApples = new RequestItem(apple, 5, new Money(2.5));
+        RequestItem onePeniciline = new RequestItem(peniciline, 1, new Money(3));
+
+        InvoiceRequest invoiceRequest = new InvoiceRequest(clientData);
+        invoiceRequest.add(fiveApples);
+        invoiceRequest.add(onePeniciline);
+
+        Invoice invoice = bookKeeper.issuance(invoiceRequest, noTaxPolicy);
+
+        verify(noTaxPolicy, times(2)).calculateTax(any(ProductType.class), any(Money.class));
+    }
+
 }
