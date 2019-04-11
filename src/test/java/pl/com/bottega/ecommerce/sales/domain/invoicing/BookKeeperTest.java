@@ -98,6 +98,16 @@ public class BookKeeperTest {
     }
 
     @Test
+    public void BookKeeperAskedForInvoiceWithoutPositionsShouldReturnInvoiceWithZeroGros() {
+        InvoiceRequest invoiceRequest = new InvoiceRequest(clientData);
+        Invoice invoice = bookKeeper.issuance(invoiceRequest, noTaxPolicy);
+
+        assertThat(invoice.getGros()
+                          .equals(Money.ZERO),
+                Matchers.comparesEqualTo(true));
+    }
+
+    @Test
     public void BookKeeperAskedForInvoiceWithTwoPositionShouldCalculateTaxTwoTimes() {
         RequestItem fiveApples = new RequestItem(apple, 5, new Money(2.5));
         RequestItem onePeniciline = new RequestItem(peniciline, 1, new Money(3));
