@@ -79,7 +79,7 @@ public class AddProductCommandHandlerTest {
         Mockito.when(productRepository.load(new Id("1")))
                .thenReturn(banana);
 
-        SuggestionService suggestionService = Mockito.mock(SuggestionService.class);
+        suggestionService = Mockito.mock(SuggestionService.class);
         // can be only raw values or only matchers
         Mockito.when(suggestionService.suggestEquivalent(eq(pineapple), any(Client.class)))
                .thenReturn(banana);
@@ -99,7 +99,7 @@ public class AddProductCommandHandlerTest {
     }
 
     @Test
-    public void AddProductCommandHandlerShouldAddToReservationAvailableProductOneTime() {
+    public void AddProductCommandHandlerShouldAddToReservationAvailableProduct() {
         AddProductCommandHandler addProductCommandHandler = new AddProductCommandHandler(reservationRepository, productRepository,
                 suggestionService, clientRepository, systemContext);
         int quantity = 5;
@@ -111,6 +111,23 @@ public class AddProductCommandHandlerTest {
         addProductCommandHandler.handle(addProductCommand);
 
         verify(reservation, times(1)).add(pineapple, quantity);
+    }
+
+    @Test
+    public void AddProductCommandHandlerShouldAddToReservationSuggestedProductIfTherIsNoRequiredProduct() {
+        AddProductCommandHandler addProductCommandHandler = new AddProductCommandHandler(reservationRepository, productRepository,
+                suggestionService, clientRepository, systemContext);
+        int quantity = 5;
+
+        Mockito.when(pineapple.isAvailable())
+               .thenReturn(false);
+        Mockito.when(banana.isAvailable())
+               .thenReturn(true);
+        // second id for pineapple
+        AddProductCommand addProductCommand = new AddProductCommand(new Id("dontMatter"), new Id("0"), quantity);
+        addProductCommandHandler.handle(addProductCommand);
+
+        verify(reservation, times(1)).add(banana, quantity);
     }
 
 }
