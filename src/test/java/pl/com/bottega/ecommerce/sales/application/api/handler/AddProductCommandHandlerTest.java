@@ -1,12 +1,16 @@
 package pl.com.bottega.ecommerce.sales.application.api.handler;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import pl.com.bottega.ecommerce.canonicalmodel.publishedlanguage.Id;
+import pl.com.bottega.ecommerce.sales.application.api.command.AddProductCommand;
 import pl.com.bottega.ecommerce.sales.domain.client.Client;
 import pl.com.bottega.ecommerce.sales.domain.client.ClientRepository;
 import pl.com.bottega.ecommerce.sales.domain.equivalent.SuggestionService;
@@ -73,7 +77,8 @@ public class AddProductCommandHandlerTest {
                .thenReturn(banana);
 
         SuggestionService suggestionService = Mockito.mock(SuggestionService.class);
-        Mockito.when(suggestionService.suggestEquivalent(pineapple, any(Client.class)))
+        // can be only raw values or only matchers
+        Mockito.when(suggestionService.suggestEquivalent(eq(pineapple), any(Client.class)))
                .thenReturn(banana);
     }
 
@@ -81,5 +86,13 @@ public class AddProductCommandHandlerTest {
     public void AddProductCommandHandlerShouldSaveReservationToItsRepesitoryOnce() {
         AddProductCommandHandler addProductCommandHandler = new AddProductCommandHandler(reservationRepository, productRepository,
                 suggestionService, clientRepository, systemContext);
+
+        Mockito.when(pineapple.isAvailable())
+               .thenReturn(true);
+        // second id for pineapple
+        AddProductCommand addProductCommand = new AddProductCommand(new Id("dontMatter"), new Id("0"), 5);
+        addProductCommandHandler.handle(addProductCommand);
+        verify(reservationRepository, times(1)).save(any(Reservation.class));
     }
+
 }
