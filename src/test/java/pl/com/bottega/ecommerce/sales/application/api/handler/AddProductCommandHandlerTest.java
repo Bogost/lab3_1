@@ -37,9 +37,12 @@ public class AddProductCommandHandlerTest {
 
     private SystemContext systemContext;
 
+    private Reservation reservation;
+
     @Before
     public void setup() {
-        Reservation reservation = Mockito.mock(Reservation.class);
+        // Reservation reservation = Mockito.mock(Reservation.class);
+        reservation = Mockito.mock(Reservation.class);
 
         reservationRepository = Mockito.mock(ReservationRepository.class);
         Mockito.when(reservationRepository.load(any(Id.class)))
@@ -93,6 +96,21 @@ public class AddProductCommandHandlerTest {
         AddProductCommand addProductCommand = new AddProductCommand(new Id("dontMatter"), new Id("0"), 5);
         addProductCommandHandler.handle(addProductCommand);
         verify(reservationRepository, times(1)).save(any(Reservation.class));
+    }
+
+    @Test
+    public void AddProductCommandHandlerShouldAddToReservationAvailableProductOneTime() {
+        AddProductCommandHandler addProductCommandHandler = new AddProductCommandHandler(reservationRepository, productRepository,
+                suggestionService, clientRepository, systemContext);
+        int quantity = 5;
+
+        Mockito.when(pineapple.isAvailable())
+               .thenReturn(true);
+        // second id for pineapple
+        AddProductCommand addProductCommand = new AddProductCommand(new Id("dontMatter"), new Id("0"), quantity);
+        addProductCommandHandler.handle(addProductCommand);
+
+        verify(reservation, times(1)).add(pineapple, quantity);
     }
 
 }
