@@ -41,7 +41,6 @@ public class AddProductCommandHandlerTest {
 
     @Before
     public void setup() {
-        // Reservation reservation = Mockito.mock(Reservation.class);
         reservation = Mockito.mock(Reservation.class);
 
         reservationRepository = Mockito.mock(ReservationRepository.class);
@@ -56,22 +55,8 @@ public class AddProductCommandHandlerTest {
 
         systemContext = new SystemContext();// zawsze zwróci usera o id 1
 
-        // pineapple = new Product(new Id("0"), new Money(3), "Pineapple", ProductType.FOOD);
-        pineapple = Mockito.mock(Product.class);
-        Mockito.when(pineapple.getPrice())
-               .thenReturn(new Money(3));
-        Mockito.when(pineapple.getName())
-               .thenReturn("pineapple");
-        Mockito.when(pineapple.getProductType())
-               .thenReturn(ProductType.FOOD);
-
-        banana = Mockito.mock(Product.class);
-        Mockito.when(banana.getPrice())
-               .thenReturn(new Money(1));
-        Mockito.when(banana.getName())
-               .thenReturn("banana");
-        Mockito.when(banana.getProductType())
-               .thenReturn(ProductType.FOOD);
+        pineapple = Mockito.spy(new Product(new Id("0"), new Money(3), "Pineapple", ProductType.FOOD));
+        banana = Mockito.spy(new Product(new Id("1"), new Money(1), "banana", ProductType.FOOD));
 
         productRepository = Mockito.mock(ProductRepository.class);
         Mockito.when(productRepository.load(new Id("0")))
