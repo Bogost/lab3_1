@@ -1,12 +1,15 @@
 package pl.com.bottega.ecommerce.sales.application.api.handler;
 
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import pl.com.bottega.ecommerce.canonicalmodel.publishedlanguage.Id;
@@ -95,7 +98,16 @@ public class AddProductCommandHandlerTest {
         AddProductCommand addProductCommand = new AddProductCommand(new Id("dontMatter"), new Id("0"), quantity);
         addProductCommandHandler.handle(addProductCommand);
 
-        verify(reservation, times(1)).add(pineapple, quantity);
+        ArgumentCaptor<Product> productArgument = ArgumentCaptor.forClass(Product.class);
+        ArgumentCaptor<Integer> integerArgument = ArgumentCaptor.forClass(Integer.class);
+
+        verify(reservation).add(productArgument.capture(), integerArgument.capture());
+        assertThat(productArgument.getValue()
+                                  .getId()
+                                  .getId(),
+                Matchers.comparesEqualTo(pineapple.getId()
+                                                  .getId()));
+        assertThat(integerArgument.getValue(), Matchers.comparesEqualTo(quantity));
     }
 
     @Test
@@ -112,7 +124,16 @@ public class AddProductCommandHandlerTest {
         AddProductCommand addProductCommand = new AddProductCommand(new Id("dontMatter"), new Id("0"), quantity);
         addProductCommandHandler.handle(addProductCommand);
 
-        verify(reservation, times(1)).add(banana, quantity);
+        ArgumentCaptor<Product> productArgument = ArgumentCaptor.forClass(Product.class);
+        ArgumentCaptor<Integer> integerArgument = ArgumentCaptor.forClass(Integer.class);
+
+        verify(reservation).add(productArgument.capture(), integerArgument.capture());
+        assertThat(productArgument.getValue()
+                                  .getId()
+                                  .getId(),
+                Matchers.comparesEqualTo(banana.getId()
+                                               .getId()));
+        assertThat(integerArgument.getValue(), Matchers.comparesEqualTo(quantity));
     }
 
 }
