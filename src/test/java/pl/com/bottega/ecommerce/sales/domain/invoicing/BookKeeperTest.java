@@ -48,31 +48,8 @@ public class BookKeeperTest {
         Mockito.when(noTaxPolicy.calculateTax(any(ProductType.class), any(Money.class)))
                .thenReturn(taxForTaxPolicy);
         // products-------------------------------------------------------------------------------
-        // apple = new ProductData(Id.generate(), new Money(0.5), "apple", ProductType.FOOD, date);
-        apple = Mockito.mock(ProductData.class);
-        Mockito.when(apple.getProductId())
-               .thenReturn(new Id("0"));
-        Mockito.when(apple.getPrice())
-               .thenReturn(new Money(0.5));
-        Mockito.when(apple.getName())
-               .thenReturn("apple");
-        Mockito.when(apple.getType())
-               .thenReturn(ProductType.FOOD);
-        Mockito.when(apple.getSnapshotDate())
-               .thenReturn(date);
-
-        peniciline = Mockito.mock(ProductData.class);
-        Mockito.when(peniciline.getProductId())
-               .thenReturn(new Id("1"));
-        Mockito.when(peniciline.getPrice())
-               .thenReturn(new Money(3));
-        Mockito.when(peniciline.getName())
-               .thenReturn("peniciline");
-        Mockito.when(peniciline.getType())
-               .thenReturn(ProductType.DRUG);
-        Mockito.when(peniciline.getSnapshotDate())
-               .thenReturn(date);
-
+        apple = new ProductData(new Id("0"), new Money(0.5), "apple", ProductType.FOOD, date);
+        peniciline = new ProductData(new Id("1"), new Money(3), "peniciline", ProductType.DRUG, date);
     }
 
     @Test
