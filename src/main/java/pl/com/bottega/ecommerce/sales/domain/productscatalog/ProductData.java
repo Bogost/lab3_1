@@ -19,14 +19,14 @@ import pl.com.bottega.ecommerce.sharedkernel.Money;
 
 public class ProductData {
 
-    private Id productId;
-    private Money price;
+    private final Id productId;
+    private final Money price;
 
-    private String name;
+    private final String name;
 
-    private Date snapshotDate;
+    private final Date snapshotDate;
 
-    private ProductType type;
+    private final ProductType type;
 
     public ProductData(Id productId, Money price, String name, ProductType type, Date snapshotDate) {
         this.productId = productId;
