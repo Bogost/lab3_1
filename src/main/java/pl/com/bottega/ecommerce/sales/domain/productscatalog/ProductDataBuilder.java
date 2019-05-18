@@ -22,6 +22,31 @@ public class ProductDataBuilder {
 
     public ProductDataBuilder() {}
 
+    public ProductDataBuilder withId(Id id) {
+        productId = id;
+        return this;
+    }
+
+    public ProductDataBuilder withPrice(Money money) {
+        price = money;
+        return this;
+    }
+
+    public ProductDataBuilder withName(String s) {
+        name = s;
+        return this;
+    }
+
+    public ProductDataBuilder withType(ProductType productType) {
+        type = productType;
+        return this;
+    }
+
+    public ProductDataBuilder withDate(Date date) {
+        snapshotDate = date;
+        return this;
+    }
+
     public ProductData build() {
         return new ProductData(productId, price, name, type, snapshotDate);
     }
