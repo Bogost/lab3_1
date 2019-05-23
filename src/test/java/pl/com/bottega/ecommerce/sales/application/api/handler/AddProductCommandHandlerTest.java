@@ -18,11 +18,10 @@ import pl.com.bottega.ecommerce.sales.domain.client.Client;
 import pl.com.bottega.ecommerce.sales.domain.client.ClientRepository;
 import pl.com.bottega.ecommerce.sales.domain.equivalent.SuggestionService;
 import pl.com.bottega.ecommerce.sales.domain.productscatalog.Product;
+import pl.com.bottega.ecommerce.sales.domain.productscatalog.ProductBuilder;
 import pl.com.bottega.ecommerce.sales.domain.productscatalog.ProductRepository;
-import pl.com.bottega.ecommerce.sales.domain.productscatalog.ProductType;
 import pl.com.bottega.ecommerce.sales.domain.reservation.Reservation;
 import pl.com.bottega.ecommerce.sales.domain.reservation.ReservationRepository;
-import pl.com.bottega.ecommerce.sharedkernel.Money;
 import pl.com.bottega.ecommerce.system.application.SystemContext;
 
 public class AddProductCommandHandlerTest {
@@ -58,8 +57,10 @@ public class AddProductCommandHandlerTest {
 
         systemContext = new SystemContext();// zawsze zwróci usera o id 1
         // DO ZMIAN
-        pineapple = Mockito.spy(new Product(new Id("0"), new Money(3), "Pineapple", ProductType.FOOD));
-        banana = Mockito.spy(new Product(new Id("1"), new Money(1), "banana", ProductType.FOOD));
+        pineapple = Mockito.spy(new ProductBuilder().withId(new Id("0"))
+                                                    .build());
+        banana = Mockito.spy(new ProductBuilder().withId(new Id("1"))
+                                                 .build());
 
         productRepository = Mockito.mock(ProductRepository.class);
         Mockito.when(productRepository.load(new Id("0")))
