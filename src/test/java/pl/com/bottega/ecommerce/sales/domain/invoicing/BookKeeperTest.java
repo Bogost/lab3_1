@@ -79,12 +79,13 @@ public class BookKeeperTest {
 
     @Test
     public void BookKeeperAskedForInvoiceWithTwoPositionShouldCalculateTaxTwoTimes() {
-        RequestItem fiveApples = new RequestItem(apple, 5, new Money(2.5));
-        RequestItem onePeniciline = new RequestItem(peniciline, 1, new Money(3));
+        RequestItem something = new RequestItemBuilder().build();
+        RequestItem somethingOther = new RequestItemBuilder().withQuantity(50)
+                                                             .build();
 
         InvoiceRequest invoiceRequest = new InvoiceRequest(clientData);
-        invoiceRequest.add(fiveApples);
-        invoiceRequest.add(onePeniciline);
+        invoiceRequest.add(something);
+        invoiceRequest.add(somethingOther);
 
         Invoice invoice = bookKeeper.issuance(invoiceRequest, noTaxPolicy);
 
