@@ -27,4 +27,8 @@ public class RequestItemBuilder {
         return this;
     }
 
+    RequestItem build() {
+        return new RequestItem(productData, quantity, totalCost);
+    }
+
 }
