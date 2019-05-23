@@ -15,7 +15,6 @@ import org.mockito.Mockito;
 
 import pl.com.bottega.ecommerce.canonicalmodel.publishedlanguage.ClientData;
 import pl.com.bottega.ecommerce.canonicalmodel.publishedlanguage.Id;
-import pl.com.bottega.ecommerce.sales.domain.productscatalog.ProductData;
 import pl.com.bottega.ecommerce.sales.domain.productscatalog.ProductType;
 import pl.com.bottega.ecommerce.sharedkernel.Money;
 
@@ -27,9 +26,6 @@ public class BookKeeperTest {
     private ClientData clientData;
 
     private TaxPolicy noTaxPolicy;
-
-    private ProductData apple;
-    private ProductData peniciline;
 
     @Before
     public void setup() {
@@ -47,16 +43,13 @@ public class BookKeeperTest {
         Tax taxForTaxPolicy = new Tax(new Money(0), "no tax");
         Mockito.when(noTaxPolicy.calculateTax(any(ProductType.class), any(Money.class)))
                .thenReturn(taxForTaxPolicy);
-        // products-------------------------------------------------------------------------------
-        apple = new ProductData(new Id("0"), new Money(0.5), "apple", ProductType.FOOD, date);
-        peniciline = new ProductData(new Id("1"), new Money(3), "peniciline", ProductType.DRUG, date);
     }
 
     @Test
     public void BookKeeperAskedForInvoiceWithOnePositionShouldReturnSuchInvoice() {
-        RequestItem tenApples = new RequestItem(apple, 10, new Money(5));
+        RequestItem something = new RequestItemBuilder().build();
         InvoiceRequest invoiceRequest = new InvoiceRequest(clientData);
-        invoiceRequest.add(tenApples);
+        invoiceRequest.add(something);
         Invoice invoice = bookKeeper.issuance(invoiceRequest, noTaxPolicy);
 
         assertThat(invoice.getItems()

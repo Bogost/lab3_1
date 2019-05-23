@@ -10,24 +10,24 @@ public class RequestItemBuilder {
     int quantity = 1;
     Money totalCost = new Money(1);
 
-    RequestItemBuilder() {}
+    public RequestItemBuilder() {}
 
-    RequestItemBuilder withProductData(ProductData pd) {
+    public RequestItemBuilder withProductData(ProductData pd) {
         productData = pd;
         return this;
     }
 
-    RequestItemBuilder withQuantity(int i) {
+    public RequestItemBuilder withQuantity(int i) {
         quantity = i;
         return this;
     }
 
-    RequestItemBuilder withTotalCost(Money m) {
+    public RequestItemBuilder withTotalCost(Money m) {
         totalCost = m;
         return this;
     }
 
-    RequestItem build() {
+    public RequestItem build() {
         return new RequestItem(productData, quantity, totalCost);
     }
 
