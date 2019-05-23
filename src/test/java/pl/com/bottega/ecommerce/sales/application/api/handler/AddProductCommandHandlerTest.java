@@ -57,7 +57,7 @@ public class AddProductCommandHandlerTest {
                .thenReturn(client);
 
         systemContext = new SystemContext();// zawsze zwróci usera o id 1
-
+        // DO ZMIAN
         pineapple = Mockito.spy(new Product(new Id("0"), new Money(3), "Pineapple", ProductType.FOOD));
         banana = Mockito.spy(new Product(new Id("1"), new Money(1), "banana", ProductType.FOOD));
 
